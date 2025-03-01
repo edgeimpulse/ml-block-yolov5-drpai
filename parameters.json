@@ -1,0 +1,50 @@
+{
+    "version": 1,
+    "type": "machine-learning",
+    "info": {
+        "name": "YOLOv5 for Renesas DRP-AI",
+        "description": "Transfer learning model based on Ultralytics YOLOv5, supporting RGB input at any resolution (square images only). This block is only compatible with Renesas DRP-AI.",
+        "operatesOn": "object_detection",
+        "indRequiresGpu": false,
+        "imageInputScaling": "0..1",
+        "objectDetectionLastLayer": "yolov5v5-drpai",
+        "repositoryUrl": "https://github.com/edgeimpulse/ml-block-yolov5-drpai"
+    },
+    "parameters": [
+        {
+            "name": "Number of training cycles",
+            "value": "30",
+            "type": "int",
+            "help": "Number of epochs to train the neural network on.",
+            "param": "epochs"
+        },
+        {
+            "name": "Model size",
+            "value": "s",
+            "type": "select",
+            "valid": [
+                {
+                    "label": "Small - 7.2M params, 14.1 MB",
+                    "value": "s"
+                },
+                {
+                    "label": "Medium - 21.2M params, 40.8 MB",
+                    "value": "m"
+                },
+                {
+                    "label": "Large - 46.5M params, 89.3 MB",
+                    "value": "l"
+                }
+            ],
+            "param": "model-size"
+        },
+        {
+            "name": "Batch size",
+            "value": "16",
+            "type": "int",
+            "help": "The batch size to use during training. Consider reducing this for larger models. Use -1 to autotune this value.",
+            "param": "batch-size",
+            "optional": true
+        }
+    ]
+}

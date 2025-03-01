@@ -1,0 +1,13 @@
+out/
+frozen*
+beer/
+env/
+home/*.tflite
+home/*.npy
+.DS_Store
+out-*/
+.ei-block-config*
+data/
+test/
+yolov5/
+input.json
