@@ -14,7 +14,7 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
-    --model-size) # e.g. one of: n, s, m, l
+    --model-size) # e.g. one of: s, m, l
       MODEL_SIZE="$2"
       shift # past argument
       shift # past value
@@ -47,6 +47,10 @@ if [ -z "$EPOCHS" ]; then
 fi
 if [ -z "$MODEL_SIZE" ]; then
     echo "Missing --model-size"
+    exit 1
+fi
+if [[ "$MODEL_SIZE" != "s" && "$MODEL_SIZE" != "m" && "$MODEL_SIZE" != "l" ]]; then
+    echo "Invalid --model-size '"$MODEL_SIZE"', expected 's', 'm' or 'l'"
     exit 1
 fi
 if [ -z "$BATCH_SIZE" ]; then
@@ -106,7 +110,13 @@ echo ""
 echo "Converting to TensorFlow Lite model (fp16)..."
 cp $OUT_DIRECTORY/model.onnx /tmp/model.onnx
 # strip off all but one output layers
-snd4onnx -rn 397 672 947 -if /tmp/model.onnx -of /tmp/model.onnx --non_verbose
+if [ "$MODEL_SIZE" == "s" ]; then
+  snd4onnx -rn 397 672 947 -if /tmp/model.onnx -of /tmp/model.onnx --non_verbose
+elif [ "$MODEL_SIZE" == "m" ]; then
+  snd4onnx -rn 524 799 1074 -if /tmp/model.onnx -of /tmp/model.onnx --non_verbose
+elif [ "$MODEL_SIZE" == "l" ]; then
+  snd4onnx -rn 651 926 1201 -if /tmp/model.onnx -of /tmp/model.onnx --non_verbose
+fi
 # Convert to NHWC
 python3 /scripts/convert-to-nhwc.py --onnx-file /tmp/model.onnx --out-file /tmp/model.onnx
 # Convert to TFLite
